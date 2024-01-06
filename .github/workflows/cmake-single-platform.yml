@@ -39,7 +39,7 @@ jobs:
         host: 'linux'
         target: 'desktop'
         arch: 'gcc_64'
-        archives: 'qtbase'
+        archives: 'qtbase icu'
         cache: 'false'
         cache-key-prefix: 'install-qt5-action'
 
