@@ -40,7 +40,7 @@ jobs:
         target: 'desktop'
         arch: 'gcc_64'
         archives: 'qtbase icu'
-        cache: 'false'
+        cache: 'true'
         cache-key-prefix: 'install-qt5-action'
 
     - name: Configure CMake
