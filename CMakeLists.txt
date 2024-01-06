@@ -32,6 +32,8 @@ if(UNIX AND NOT APPLE)
 
     include(GNUInstallDirs)
     set(DATA_INSTALL_DIR "${CMAKE_INSTALL_DATADIR}/freelib")
+ELSE(WIN32)
+    set(DATA_INSTALL_DIR "${CMAKE_INSTALL_DATADIR}/freelib")
 endif()
 
 add_subdirectory(freeLib/src/)
