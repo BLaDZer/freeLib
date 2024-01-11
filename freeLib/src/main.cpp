@@ -1,5 +1,6 @@
 #define QT_USE_QSTRINGBUILDER
 #include <iostream>
+#include <stdlib.h>
 #include <QApplication>
 #include <QNetworkProxy>
 #include <QSplashScreen>
