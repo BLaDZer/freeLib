@@ -1,6 +1,5 @@
 #define QT_USE_QSTRINGBUILDER
 #include <iostream>
-#include <stdlib.h>
 #include <QApplication>
 #include <QNetworkProxy>
 #include <QSplashScreen>
@@ -10,6 +9,15 @@
 #include <QSqlError>
 #include <QThread>
 #include <QString>
+
+#include <cstdlib>
+#ifdef WIN32
+// We need _putenv_s(), which is defined here:
+#include <stdlib.h>
+#else
+// On Unix-like systems we need setenv()/unsetenv(), which are defined here:
+#include <unistd.h>
+#endif  // WIN32
 
 #include "mainwindow.h"
 #include "aboutdialog.h"
@@ -22,6 +30,30 @@ uint idCurrentLib;
 bool bTray;
 bool bVerbose;
 Options options;
+
+void UnsetEnv(char const* variable) {
+#ifdef WIN32
+  // Use _putenv_s() instead of SetEnvironmentVariable() because std::getenv()
+  // caches the environment during program startup.
+  (void)_putenv_s(variable, "");
+#else
+  unsetenv(variable);
+#endif  // WIN32
+}
+
+void SetEnv(char const* variable, char const* value) {
+#ifdef WIN32
+  // Use _putenv_s() instead of SetEnvironmentVariable() because std::getenv()
+  // caches the environment during program startup.
+  if (value != nullptr) {
+    (void)_putenv_s(variable, value);
+  } else {
+    UnsetEnv(variable);
+  }
+#else
+  (void)setenv(variable, value, 1);
+#endif  // WIN32
+}
 
 void UpdateLibs()
 {
@@ -357,7 +389,7 @@ int main(int argc, char *argv[])
     }
 #endif
     if(bServer){
-        setenv("QT_QPA_PLATFORM", "offscreen", 1);
+        SetEnv("QT_QPA_PLATFORM", "offscreen");
         a = new QGuiApplication(argc, argv);
     }else{
         a = new QApplication(argc, argv);
