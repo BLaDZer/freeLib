@@ -59,4 +59,4 @@ jobs:
       run: ctest -C ${{env.BUILD_TYPE}}
 
     - name: Check Artifacts
-      run: sudo cmake install
+      run: cd ${{github.workspace}}/build && sudo make install
