@@ -62,7 +62,9 @@ jobs:
       run: cd ${{github.workspace}}/build && make install DESTDIR=${{github.workspace}}/debian-maintainer
 
     - name: Build deb package
-      run: dpkg-deb --build ${{github.workspace}}/debian-maintainer test.deb
+      run: mkdir release && dpkg-deb --build ${{github.workspace}}/debian-maintainer "release/${{ env.GITHUB_REPO_NAME }}_${{ env.VERSION }}_${{ env.DEB_ARCHITECTURE }}.deb"
 
-    - name: Check Artifacts
-      run: ls -lh
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: release/*
