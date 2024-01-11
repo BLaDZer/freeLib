@@ -61,5 +61,8 @@ jobs:
     - name: Install Artifacts to the temp directory
       run: cd ${{github.workspace}}/build && make install DESTDIR=${{github.workspace}}/debian-maintainer
 
+    - name: Build deb package
+      run: dpkg-deb --build ${{github.workspace}}/debian-maintainer test.deb
+
     - name: Check Artifacts
-      run: ls -R ; ls -R ${{github.workspace}}
+      run: ls -lh
