@@ -65,6 +65,9 @@ jobs:
     - name: Build deb package
       run: mkdir release && dpkg-deb --build ${{github.workspace}}/debian-maintainer "release/${{ env.GITHUB_REPO_NAME }}_${FREELIB_VERSION}_${{ env.DEB_ARCHITECTURE }}.deb"
 
+    - name: Env dump
+      run: env
+
     - name: Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
