@@ -63,7 +63,7 @@ jobs:
       run: cd ${{github.workspace}}/build && make install DESTDIR=${{github.workspace}}/debian-maintainer
 
     - name: Build deb package
-      run: mkdir release && dpkg-deb --build ${{github.workspace}}/debian-maintainer "release/${{ env.GITHUB_REPO_NAME }}_${{ env.VERSION }}_${{ env.DEB_ARCHITECTURE }}.deb"
+      run: mkdir release && dpkg-deb --build ${{github.workspace}}/debian-maintainer "release/${{ env.GITHUB_REPO_NAME }}_${FREELIB_VERSION}_${{ env.DEB_ARCHITECTURE }}.deb"
 
     - name: Release
       uses: softprops/action-gh-release@v1
