@@ -13,6 +13,7 @@ env:
   QT_VERSION:     "5.15.*"
   MINGW_VERSION:  "win64_mingw81"
   MINGW_PATH:     "mingw81_64"
+  CXX:            "C:/mingw64/bin/g++.exe"
 
 jobs:
   build:
