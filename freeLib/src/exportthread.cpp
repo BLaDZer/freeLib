@@ -11,8 +11,13 @@
 #include <QSqlQuery>
 #include <QRegularExpression>
 #include <QSqlDatabase>
-#include <unistd.h>
 
+#ifdef WIN32
+#include <windows.h> // MAX_PATH
+#else
+#include <unistd.h>
+#include <sys/stat.h>
+#endif
 
 #include "SmtpClient/src/smtpclient.h"
 #include "SmtpClient/src/mimeattachment.h"
@@ -319,7 +324,16 @@ void ExportThread::export_books()
         }
     }
 
+#ifdef PATH_MAX
+    int nMaxFileName = PATH_MAX;
+#elif defined(MAX_PATH)
+    unsigned int nMaxFileName = MAX_PATH;
+#else
     auto nMaxFileName = pathconf(sExportDir_.toUtf8().data(), _PC_NAME_MAX);
+    if (nMaxFileName <= 0)
+        nMaxFileName = 4096;
+#endif
+
     uint count = 0;
     for(const auto &listBooks: books_group)
     {
