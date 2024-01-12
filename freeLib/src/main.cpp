@@ -47,7 +47,7 @@ void os_setenv(char const* variable, char const* value) {
   if (value != nullptr) {
     (void)_putenv_s(variable, value);
   } else {
-    os_setenv(variable);
+    os_unsetenv(variable);
   }
 #else
   (void)setenv(variable, value, 1);
