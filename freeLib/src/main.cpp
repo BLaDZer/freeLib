@@ -10,7 +10,6 @@
 #include <QThread>
 #include <QString>
 
-#include <cstdlib>
 #ifdef WIN32
 // We need _putenv_s(), which is defined here:
 #include <stdlib.h>
@@ -31,7 +30,7 @@ bool bTray;
 bool bVerbose;
 Options options;
 
-void UnsetEnv(char const* variable) {
+void os_unsetenv(char const* variable) {
 #ifdef WIN32
   // Use _putenv_s() instead of SetEnvironmentVariable() because std::getenv()
   // caches the environment during program startup.
@@ -41,14 +40,14 @@ void UnsetEnv(char const* variable) {
 #endif  // WIN32
 }
 
-void SetEnv(char const* variable, char const* value) {
+void os_setenv(char const* variable, char const* value) {
 #ifdef WIN32
   // Use _putenv_s() instead of SetEnvironmentVariable() because std::getenv()
   // caches the environment during program startup.
   if (value != nullptr) {
     (void)_putenv_s(variable, value);
   } else {
-    UnsetEnv(variable);
+    os_setenv(variable);
   }
 #else
   (void)setenv(variable, value, 1);
@@ -389,7 +388,7 @@ int main(int argc, char *argv[])
     }
 #endif
     if(bServer){
-        SetEnv("QT_QPA_PLATFORM", "offscreen");
+        os_setenv("QT_QPA_PLATFORM", "offscreen");
         a = new QGuiApplication(argc, argv);
     }else{
         a = new QApplication(argc, argv);
